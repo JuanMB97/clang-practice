@@ -50,5 +50,25 @@ int main(){
 
   char* concat_safe = mstr_concat_safe("go", spc, 20);
 
+  char message[5];
+  printf("Escribe algo: ");
+  const MReadStatus res_stdin = read_line(message, 5);
+
+  printf("MESSAGE: %d\n", res_stdin);
+  if(res_stdin != 2){
+    printf("Texto: %s\n", message);
+  }
+  int mi_edad; 
+  int* is_number = &mi_edad;
+  
+  MReadStatus check_number = read_int("Ingresa tu edad: ", is_number);
+
+  printf("MESSAGE NUMBER: %d\n", check_number);
+  
+  if(check_number == 0){
+    printf("Tu edad es %d. \n", *is_number);
+  }
+  
+
   return 0;
 }

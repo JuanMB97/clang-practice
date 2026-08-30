@@ -17,5 +17,6 @@ typedef enum {
   READ_ERROR,
 } MReadStatus;
 MReadStatus read_line(char* buffer, size_t size);
+MReadStatus read_int(const char* prompt, int* buffer);
 #endif
 

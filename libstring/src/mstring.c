@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
 #include "../include/mstring.h"
@@ -151,8 +152,56 @@ char* mstr_concat_safe(const char* word, char* destino, size_t tam){
 // Leer del teclado
 MReadStatus read_line(char* buffer, size_t size){
   MReadStatus response;
-  fgets(buffer, size, stdin);
+  if(fgets(buffer, size, stdin) != NULL){
+    int i = 0;
+    response = READ_EOF;
+    while(buffer[i] != '\0'){
+      if(buffer[i] == '\n'){
+        response = READ_OK;
+        break;
+      }
+      i += 1;
+    }
+    if(response == READ_EOF){
+      int c;
+      // Limpiamos stdin por el overflow.
+      while ((c = getchar()) != '\n' && c != EOF);
+    }
+  }else{
+    response = READ_ERROR;
+  }
 
-  
   return response;
+}
+
+MReadStatus read_int(const char* prompt, int* buffer){
+  char dato[50];
+  char *fin;
+  MReadStatus res;
+
+  printf("%s", prompt);  
+  const MReadStatus res_line = read_line(dato, 50); 
+  
+  if(res_line != READ_ERROR){
+    int i = 0;
+    while(dato[i] != '\0'){
+      if(dato[i] == '\n'){
+        dato[i] = '\0';
+      }
+      i += 1;
+    }
+    long valor = strtol(dato, &fin, 10);
+
+    if(*fin == '\0'){
+      *buffer = (int)valor;
+      res = READ_OK;
+    }else {
+      *buffer = (int)valor;
+      res = READ_EOF;
+    }
+  }else {
+      res = READ_ERROR;
+  }
+  
+  return res;
 }
